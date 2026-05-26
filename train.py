@@ -1,0 +1,94 @@
+
+
+# Train the network with loging and saving
+#from tqdm import tqdm
+import setup
+from setup import trainloader, inputs, labels, outputs, optimizer
+from setup import net, criterion, testloader
+import json
+import torch
+
+best_acc = 0 #initialise best accuarcy
+logs = [] #initalise logs list
+
+#Training loops for epoch and batches
+for epoch in range(2):  # loop over the dataset multiple times
+
+    running_loss = 0.0
+
+#    loop = tqdm(trainloader)
+
+    #for i, data in enumerate(loop, 0):
+    for i, data in enumerate(trainloader, 0):
+        # get the inputs; data is a list of [inputs, labels]
+        inputs, labels = data
+        
+        # zero the parameter gradients
+        optimizer.zero_grad()
+
+        # forward + backward + optimize
+        outputs = net(inputs) # predict
+        loss = criterion(outputs, labels) # measure error
+        loss.backward() # compute gradients
+        optimizer.step()  # update weights
+
+        # print statistics
+        running_loss += loss.item()
+#        loop.set_description(f"Epoch {epoch+1}")
+#        loop.set_postfix(loss=loss.item())
+        
+        if i % 2000 == 1999:    # print every 2000 mini-batches
+            print(f'[{epoch + 1}, {i + 1:5d}] loss: {running_loss / 2000:.3f}')
+            running_loss = 0.0
+
+    #Evaluation each epoch
+    correct = 0
+    total = 0
+    # since we're not training, we don't need to calculate the gradients for our outputs
+    with torch.no_grad():
+        for data in testloader:
+            images, labels = data
+            # calculate outputs by running images through the network
+            outputs = net(images)
+            # the class with the highest energy is what we choose as prediction
+            _, predicted = torch.max(outputs, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+        
+    accuracy = 100 * correct / total
+    print(f'Accuracy of the network on the 10000 test images: {accuracy} % Total = {total}')
+
+    #Checkpointing
+    # Save latest (epoch) model checkpoint
+    torch.save(
+        net.state_dict(),
+        f"checkpoints/last_model_epoch_{epoch+1}.pth"
+    )
+
+    print(f"Last model for epoch {epoch+1} saved.")
+
+    # Save best model checkpoint
+    if accuracy > best_acc:
+
+        best_acc = accuracy
+
+        torch.save(
+            net.state_dict(),
+            "checkpoints/best_model.pth"
+        )
+
+        print("Best model updated and saved.")
+
+    #Experiment tracking
+    logs.append({ 
+    "epoch": epoch, 
+    "loss": running_loss, 
+    "accuracy": accuracy 
+    }) 
+
+    # Save Experiment tracking to file
+
+    with open("metrics.json", "w") as f: 
+        json.dump(logs, f, indent=4) 
+
+print('Finished Training')
