@@ -60,8 +60,8 @@ def imshow(img):
 
 
 # get some random training images
-dataiter = iter(trainloader)
-images, labels = next(dataiter)
+#dataiter = iter(trainloader)
+#images, labels = next(dataiter)
 
 
 print("First batch image shape:", images.shape)
