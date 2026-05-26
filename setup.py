@@ -64,13 +64,13 @@ def imshow(img):
 #images, labels = next(dataiter)
 
 
-print("First batch image shape:", images.shape)
-print("First batch labels shape:", labels.shape)
+#print("First batch image shape:", images.shape)
+#print("First batch labels shape:", labels.shape)
 
 # show images
-imshow(torchvision.utils.make_grid(images))
+#imshow(torchvision.utils.make_grid(images))
 # print labels
-print(' '.join(f'{classes[labels[j]]:5s}' for j in range(batch_size))) 
+#print(' '.join(f'{classes[labels[j]]:5s}' for j in range(batch_size))) 
 
 #Define the Convolutional Neural Network
 import torch.nn as nn
