@@ -1,11 +1,16 @@
 # Train the network with loging and saving
 #from tqdm import tqdm
 import setup
-from setup import trainloader, optimizer
-from setup import net, criterion, testloader
+from setup import getdataloaders, Net
+from setup import  gettestloaders
 import json
 import torch
 import argparse
+import nn
+from setup import loss_function
+import torch.optim as optim
+
+
 
 def main(args):
     print(f"Training for {args.epochs} epochs")
@@ -13,6 +18,16 @@ def main(args):
     print(f"Learning rate: {args.lr}")    #not yet being used
     print(f"Dataset path: {args.data_dir}") #not yet being used
 
+    trainloader = getdataloaders(args.batch_size)
+    testloader = gettestloaders(args.batch_size)
+
+    net = Net()
+    total_params = sum(p.numel() for p in net.parameters())
+    print("Total Parameters:", total_params)
+    
+    #define loss fuction and otimiser
+    loss_function = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(net.parameters(), lr=args.lr, momentum=0.9)
 
     best_acc = 0 #initialise best accuarcy
     logs = [] #initalise logs list
@@ -34,7 +49,7 @@ def main(args):
 
             # forward + backward + optimize
             outputs = net(inputs) # predict
-            loss = criterion(outputs, labels) # measure error
+            loss = loss_function(outputs, labels) # measure error
             loss.backward() # compute gradients
             optimizer.step()  # update weights
 
