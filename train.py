@@ -25,8 +25,7 @@ def main(args):
     total_params = sum(p.numel() for p in net.parameters())
     print("Total Parameters:", total_params)
     
-    #define loss fuction and otimiser
-    loss_function = nn.CrossEntropyLoss()
+    #define optimiser
     optimizer = optim.SGD(net.parameters(), lr=args.lr, momentum=0.9)
 
     best_acc = 0 #initialise best accuarcy
