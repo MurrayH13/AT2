@@ -11,16 +11,16 @@ import argparse
 
 def main(args):
     print(f"Training for {args.epochs} epochs")
-    print(f"Batch size: {args.batch_size}")
-    print(f"Learning rate: {args.lr}")
-    print(f"Dataset path: {args.data_dir}")
+    print(f"Batch size: {args.batch_size}") # not yet being used
+    print(f"Learning rate: {args.lr}")    #not yet being used
+    print(f"Dataset path: {args.data_dir}") #not yet being used
 
 
 best_acc = 0 #initialise best accuarcy
 logs = [] #initalise logs list
 
 #Training loops for epoch and batches
-for epoch in range(2):  # loop over the dataset multiple times
+for epoch in range(args.epochs):  # loop over the dataset multiple times
 
     running_loss = 0.0
 
