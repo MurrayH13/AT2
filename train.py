@@ -7,6 +7,14 @@ from setup import trainloader, optimizer
 from setup import net, criterion, testloader
 import json
 import torch
+import argparse
+
+def main(args):
+    print(f"Training for {args.epochs} epochs")
+    print(f"Batch size: {args.batch_size}")
+    print(f"Learning rate: {args.lr}")
+    print(f"Dataset path: {args.data_dir}")
+
 
 best_acc = 0 #initialise best accuarcy
 logs = [] #initalise logs list
@@ -92,3 +100,22 @@ for epoch in range(2):  # loop over the dataset multiple times
         json.dump(logs, f, indent=4) 
 
 print('Finished Training')
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="PyTorch Training Script")
+
+    parser.add_argument("--epochs", type=int, default=5,
+                        help="Number of training epochs")
+
+    parser.add_argument("--batch-size", type=int, default=32,
+                        help="Batch size")
+
+    parser.add_argument("--lr", type=float, default=0.001,
+                        help="Learning rate")
+
+    parser.add_argument("--data-dir", type=str, default="./data",
+                        help="Dataset directory")
+
+    args = parser.parse_args()
+
+    main(args)
