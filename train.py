@@ -3,7 +3,7 @@
 # Train the network with loging and saving
 #from tqdm import tqdm
 import setup
-from setup import trainloader, inputs, labels, outputs, optimizer
+from setup import trainloader, outputs, optimizer
 from setup import net, criterion, testloader
 import json
 import torch
