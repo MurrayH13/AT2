@@ -6,7 +6,7 @@ from setup import  gettestloaders
 import json
 import torch
 import argparse
-import nn
+#import nn
 from setup import loss_function
 import torch.optim as optim
 
