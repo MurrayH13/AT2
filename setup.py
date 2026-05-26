@@ -24,17 +24,23 @@ transform = v2.Compose([
     v2.ToDtype(torch.float32, scale=True),
     v2.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
-batch_size = 4
 
-trainset = torchvision.datasets.CIFAR10(root='./data', train=True,
+
+def getdataloaders(batch_size):
+    trainset = torchvision.datasets.CIFAR10(root='./data', train=True,
                                         download=True, transform=transform)
-trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size,
-                                          shuffle=True, num_workers=2)
+    
+    
+    trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size,
+                                          shuffle=True, num_workers=2)                                    download=True, transform=transform)
+    return trainloader
 
-testset = torchvision.datasets.CIFAR10(root='./data', train=False,
+def gettestloaders(batch_size):
+    testset = torchvision.datasets.CIFAR10(root='./data', train=False,
                                        download=True, transform=transform)
-testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size,
+    testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size,
                                          shuffle=False, num_workers=2)
+    return testloader
 
 classes = ('plane', 'car', 'bird', 'cat',
            'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
@@ -93,13 +99,19 @@ class Net(nn.Module):
         return x
 
 
-net = Net()
 
-total_params = sum(p.numel() for p in net.parameters())
-print("Total Parameters:", total_params)
+
+
 
 # Define a Loss function and optimiser
-import torch.optim as optim
+#import torch.optim as optim
 
-criterion = nn.CrossEntropyLoss()
-optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
+#criterion = nn.CrossEntropyLoss()
+
+
+from torch.nn import functional as F
+
+def loss_function(x,y):
+    # this is how I would compute loss
+
+    return F.cross_entropy(x,y)
